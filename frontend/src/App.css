@@ -1,0 +1,45 @@
+.App {
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #f0ece2, #dfd3c3);
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.App-header {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+}
+
+.App-header h1 {
+  font-size: 2rem;
+  color: #4b3832;
+  margin-bottom: 1rem;
+}
+
+.App-header p {
+  font-size: 1rem;
+  color: #6b5e53;
+  line-height: 1.6;
+}
+
+.App-link {
+  color: #8b5e3c;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 1rem;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.App-link:hover {
+  color: #4b3832;
+}
