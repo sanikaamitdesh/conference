@@ -192,18 +192,28 @@ const AdminHome: React.FC = () => {
   const matchesXs = useMediaQuery(theme.breakpoints.down('sm'));
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(ALLOWED_DATES[0]));
   const [papers, setPapers] = useState<Paper[]>([]);
+//   Stores the paper selected for "View Details".
+
+// Used to populate the details dialog.
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedDomain, setSelectedDomain] = useState<string>('All');
+//   expandedDomain → Tracks which domain-level Accordion is currently open.
+
+// expandedRooms → Tracks which room-level Accordion (nested) is open inside
   const [expandedDomain, setExpandedDomain] = useState<string | false>(false);
   const [expandedRooms, setExpandedRooms] = useState<{ [key: string]: boolean }>({});
   const [selectedPaper, setSelectedPaper] = useState<Paper | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+//   Controls whether the details dialog is open.
+
+// Set to true when user clicks "View Details".
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchCriteria, setSearchCriteria] = useState<'default' | 'paperId' | 'title' | 'presenter'>('default');
   const navigate = useNavigate();
-
+  // On refresh, component mounts again, selectedDate defaults to first allowed date → triggers fetchPapersByDate() → fetches papers for that date from backend again.
+  // ✅ State is repopulated from API, not stored permanently on frontend.
   useEffect(() => {
     if (selectedDate) {
       fetchPapersByDate(selectedDate);
@@ -217,6 +227,12 @@ const AdminHome: React.FC = () => {
       const formattedDate = format(date, 'yyyy-MM-dd');
       
       // Fetch both papers and special sessions
+      //Promise.all → Fetch both papers and special sessions simultaneously.
+//       Sends GET requests with date as a query parameter:
+
+// /papers/by-date?date=2026-01-09
+
+// /special-sessions/by-date?date=2026-01-09
       const [papersResponse, specialSessionsResponse] = await Promise.all([
         axios.get<ApiResponse>('/papers/by-date', {
           params: { date: formattedDate }
@@ -322,14 +338,16 @@ const AdminHome: React.FC = () => {
         ? 'Special Sessions'
         : paper.domain || 'Other';
     const room = paper.selectedSlot.room;
-    
+     // If domain doesn't exist in accumulator, initialize it
     if (!acc[domain]) {
         acc[domain] = {};
     }
+    
+  // If room doesn't exist in this domain, initialize it
     if (!acc[domain][room]) {
         acc[domain][room] = [];
     }
-    
+      // Push the current paper into the correct domain → room
     acc[domain][room].push(paper);
     return acc;
   }, {} as DomainGroup);
@@ -982,3 +1000,16 @@ const AdminHome: React.FC = () => {
 };
 
 export default AdminHome; 
+
+
+
+
+
+// This AdminHome component serves as the admin control panel for managing conference papers and special sessions. At the top, it renders an AppBar with user info, notifications, and logout functionality. Below that, it displays admin features (like Add Paper, Add Special Session, Dashboard) as interactive cards that navigate to different admin tools. It also includes a date picker for selecting which day’s schedule to view, combined with search and filter options (search by Paper ID, Title, Presenter, and Domain). These filters update the state (searchQuery, searchCriteria, selectedDate) and dynamically filter the papers array in memory.
+
+// After filtering, the component groups papers into a nested structure of domains → rooms → papers using filteredPapers and groupedByDomain. It then renders this hierarchy using nested MUI Accordions, where the first level represents a domain (like AI, ML, or Special Sessions), and the second level represents a room. Inside each room accordion is a table of papers showing details like time slot, title, presenters, and actions. The table allows admins to:
+
+// Mark papers as Reported using a toggle switch (handleReportedChange → PATCH /papers/:id/reported).
+
+// Update Presentation Status (Scheduled, In Progress, Presented, Cancelled) using a dropdown (handleStatusChange → PATCH /papers/:id/presentation-status or /special-sessions/:id/status for sessions).
+// A “View Details” button opens a Dialog with full paper/session information. This entire setup creates a smooth, real-time experience where any action (e.g., marking reported, changing status) triggers a backend update and immediately reflects in the UI by updating local state without a full page reload.

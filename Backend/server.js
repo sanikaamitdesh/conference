@@ -14,7 +14,7 @@ const emailRoutes = require('./routes/emailRoutes');
 
 const app = express();
 
-// Middleware
+// Mcriddleware
 app.use(express.json());
 app.use(cookieParser());
 

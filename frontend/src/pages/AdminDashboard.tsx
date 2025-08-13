@@ -481,3 +481,22 @@ const AdminDashboard: React.FC = () => {
 };
 
 export default AdminDashboard;
+
+
+
+
+// On page load, useEffect → calls fetchStats().
+
+// fetchStats() → calls:
+
+// /papers/stats → sets pie chart states (schedulingStats, presentationStats).
+
+// /papers → sets bar chart state (domainChartData).
+
+// UI renders:
+
+// Two Pie Charts (recharts) for scheduling and presentation stats.
+
+// One Bar Chart (chart.js) for domain-wise paper count.
+
+// Summary cards use calculated values from these states

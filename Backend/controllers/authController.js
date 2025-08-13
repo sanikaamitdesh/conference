@@ -156,7 +156,7 @@ exports.register = async (req, res) => {
         console.log('User created successfully:', user);
 
         // Send token response
-        sendTokenResponse(user, 201, res);
+        sendTokenResponse(user, 201, res); //no need to lgin again after register
     } catch (error) {
         console.error('Registration error:', error);
         res.status(400).json({

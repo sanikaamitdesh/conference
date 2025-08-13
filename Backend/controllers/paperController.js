@@ -103,64 +103,64 @@ Conference Management Team`
   }
 };
 
-const selectSlot = async (req, res) => {
-  try {
-    const { paperId, date, room, session, presenterEmail } = req.body;
+// const selectSlot = async (req, res) => {
+//   try {
+//     const { paperId, date, room, session, presenterEmail } = req.body;
 
-    const paper = await Paper.findById(paperId);
-    if (!paper) {
-      return res.status(404).json({ success: false, message: 'Paper not found' });
-    }
+//     const paper = await Paper.findById(paperId);
+//     if (!paper) {
+//       return res.status(404).json({ success: false, message: 'Paper not found' });
+//     }
 
-    const sessionCount = await Paper.countDocuments({
-      'selectedSlot.date': date,
-      'selectedSlot.room': room,
-      'selectedSlot.session': session
-    });
+//     const sessionCount = await Paper.countDocuments({
+//       'selectedSlot.date': date,
+//       'selectedSlot.room': room,
+//       'selectedSlot.session': session
+//     });
 
-    if (sessionCount >= 6) {
-      return res.status(409).json({
-        success: false,
-        message: `Session ${session} in Room ${room} is already fully booked`
-      });
-    }
+//     if (sessionCount >= 6) {
+//       return res.status(409).json({
+//         success: false,
+//         message: `Session ${session} in Room ${room} is already fully booked`
+//       });
+//     }
 
-    const updated = await Paper.findOneAndUpdate(
-      { _id: paperId },
-      {
-        selectedSlot: {
-          date,
-          room,
-          session,
-          bookedBy: presenterEmail
-        }
-      },
-      { new: true, runValidators: true }
-    );
+//     const updated = await Paper.findOneAndUpdate(
+//       { _id: paperId },
+//       {
+//         selectedSlot: {
+//           date,
+//           room,
+//           session,
+//           bookedBy: presenterEmail
+//         }
+//       },
+//       { new: true, runValidators: true }
+//     );
 
-    if (!updated) {
-      return res.status(409).json({
-        success: false,
-        message: 'Session is no longer available. Please choose a different session.'
-      });
-    }
+//     if (!updated) {
+//       return res.status(409).json({
+//         success: false,
+//         message: 'Session is no longer available. Please choose a different session.'
+//       });
+//     }
 
-    await sendSlotConfirmationEmail(updated);
+//     await sendSlotConfirmationEmail(updated);
 
-    res.status(200).json({
-      success: true,
-      message: 'Session selected and confirmation email sent.',
-      data: updated
-    });
-  } catch (error) {
-    console.error('Error selecting session:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error selecting session',
-      error: error.message
-    });
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       message: 'Session selected and confirmation email sent.',
+//       data: updated
+//     });
+//   } catch (error) {
+//     console.error('Error selecting session:', error);
+//     res.status(500).json({
+//       success: false,
+//       message: 'Error selecting session',
+//       error: error.message
+//     });
+//   }
+// };
 
 const adminAddPaper = async (req, res) => {
   try {
@@ -200,7 +200,7 @@ const adminAddPaper = async (req, res) => {
 
 module.exports = {
   importPapers,
-  selectSlot,
+  // selectSlot,
   adminAddPaper,
   sendSlotConfirmationEmail
 };
