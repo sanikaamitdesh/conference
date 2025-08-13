@@ -9,7 +9,7 @@ import AttendeeHome from './pages/AttendeeHome';
 import AdminHome from './pages/AdminHome';
 import AdminDashboard from './pages/AdminDashboard';
 import AddPaper from './pages/AddPaper'; 
-import ScheduleManager from './pages/ScheduleManager';
+// import ScheduleManager from './pages/ScheduleManager';
 import CommunicationCenter from './pages/CommunicationCenter';
 import PresenterManagement from './pages/PresenterManagement';
 import PrivateRoute from './components/PrivateRoute';
@@ -123,7 +123,7 @@ const App: React.FC = () => {
                     </PrivateRoute>
                   }
                 />
-                <Route
+                {/* <Route
                   path="/admin/schedule"
                   element={
                     <PrivateRoute role="admin">
@@ -132,7 +132,7 @@ const App: React.FC = () => {
                       </Layout>
                     </PrivateRoute>
                   }
-                />
+                /> */}
                 <Route
                   path="/admin/communications"
                   element={
